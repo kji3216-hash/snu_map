@@ -179,7 +179,7 @@
   </div>
 
   <div class="notes">
-    <p>비용 규칙(걷기): 길이 × Minetti 외(2002)의 경사별 에너지 비율(평지 1, +5% 약 1.4배, +8.3% 약 1.8배, +12% 약 2.2배, +20% 약 3.2배, 완만한 내리막은 1보다 작음). 8.3%보다 급한 내리막은 미끄러짐·무릎 부담을 고려해 1%마다 0.1배를 더합니다. 휠체어·유모차는 편의증진법 시행규칙 별표1 기준으로 5.6%(1/18)까지 1배, 8.3%(1/12)까지 3배, 그보다 급한 길은 30배로 강하게 피하고 계단은 뺍니다. 계단 3배, 경사 미확인 1.5배(휠체어 3배), 차량 겸용 길 1.2배는 가정값입니다.</p>
+    <p>비용 규칙(걷기): 길이 × Minetti 외(2002)의 경사별 에너지 비율(평지 1, +5% 약 1.4배, +8.3% 약 1.8배, +12% 약 2.2배, +20% 약 3.2배, 완만한 내리막은 1보다 작음). 8.3%보다 급한 내리막은 미끄러짐·무릎 부담을 고려해 1%마다 0.1배를 더합니다. 휠체어·유모차는 편의증진법 시행규칙 별표1 기준으로 5.6%(1/18)까지 1배, 8.3%(1/12)까지 3배, 서울대 BBF 점검표의 최소 통과 기준 12.5%(1/8)까지 10배, 그보다 급한 길은 30배로 강하게 피하고 계단은 뺍니다. 계단 3배, 경사 미확인 1.5배(휠체어 3배), 차량 겸용 길 1.2배는 가정값입니다.</p>
     <p>경사는 구간(약 75m) 양 끝의 고도 차를 길이로 나눈 평균이라 구간 안의 짧은 급경사는 드러나지 않습니다. 경사 미확인 길을 평지로 보지 않습니다. 차량 겸용 길은 인도가 있는지 확인하지 않았습니다.</p>
     <p>길·건물 <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> · 고도 <a href="https://www.opentopodata.org/datasets/srtm/" target="_blank" rel="noopener">SRTM 30m / Open Topo Data</a> · 2026.10.19 수집</p>
   </div>
@@ -200,9 +200,9 @@
   // 경로 탐색: 06_분석코드/보행그래프_경로탐색.py 의 multiplier 와 같은 규칙입니다.
   const adj = nodes.map(() => []);
   edges.forEach((e, i) => { adj[e[0]].push(i); adj[e[1]].push(i); });
-  // 걷기: Minetti 외(2002) 경사별 에너지 비용 ÷ 평지 비용. 휠체어: 편의증진법 시행규칙 별표1 (접근로 1/18=5.6%, 완화 1/12=8.3%).
+  // 걷기: Minetti 외(2002) 경사별 에너지 비용 ÷ 평지 비용. 휠체어: 편의증진법 시행규칙 별표1 (접근로 1/18=5.6%, 완화 1/12=8.3%), 서울대 BBF 최소 통과 기준 1/8=12.5%.
   const minetti = i => { i = Math.max(-0.45, Math.min(0.45, i)); return 280.5*i**5 - 58.7*i**4 - 76.8*i**3 + 51.9*i**2 + 19.6*i + 2.5; };
-  const DOWNHILL_SAFE = 8.3, DOWNHILL_PENALTY = 0.1, WHEEL = [[5.6,1],[8.3,3],[Infinity,30]];
+  const DOWNHILL_SAFE = 8.3, DOWNHILL_PENALTY = 0.1, WHEEL = [[5.6,1],[8.3,3],[12.5,10],[Infinity,30]];
   function step(e, forward) {
     const s = edges[e][3], p = s >= 0 ? roads[s].properties : null;
     let grade = p && p.grade !== null ? p.grade : null;
